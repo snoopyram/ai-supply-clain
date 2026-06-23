@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI產業供應鏈全圖 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d47;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --accent4: #10b981;
+    --accent5: #ef4444;
+    --text: #e2e8f0;
+    --text-dim: #64748b;
+    --text-mid: #94a3b8;
+    --chip-design: #3b82f6;
+    --chip-fab: #8b5cf6;
+    --chip-pkg: #06b6d4;
+    --server: #10b981;
+    --cooling: #0ea5e9;
+    --power: #f59e0b;
+    --cloud: #6366f1;
+    --ai-app: #ec4899;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans TC', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    padding: 60px 24px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .15em;
+    color: var(--accent);
+    border: 1px solid rgba(0,212,255,.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    margin-bottom: 16px;
+  }
+  h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-mid);
+    max-width: 500px;
+    margin: 0 auto 40px;
+  }
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-lbl {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: .05em;
+  }
+  .stat-divider {
+    width: 1px; background: var(--border); align-self: stretch;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 64px;
+  }
+  .section-title {
+    font-size: 11px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px;
+  }
+  .section-h2 {
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    margin-bottom: 32px;
+  }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-wrap {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 40px;
+  }
+  .flow-stage {
+    flex: 1;
+    min-width: 130px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    padding: 20px 14px 16px;
+    position: relative;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .flow-stage:first-child { border-radius: 12px 0 0 12px; }
+  .flow-stage:last-child { border-radius: 0 12px 12px 0; }
+  .flow-stage:not(:last-child)::after {
+    content: '▶';
+    position: absolute;
+    right: -13px;
+    top: 50%; transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--accent);
+    z-index: 2;
+    background: var(--bg);
+    border-radius: 50%;
+    padding: 2px;
+  }
+  .flow-stage:hover, .flow-stage.active {
+    border-color: var(--accent);
+    background: var(--surface2);
+    z-index: 1;
+  }
+  .flow-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .flow-name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .flow-en {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .04em;
+  }
+
+  /* Stage colors */
+  .s1 .flow-name { color: #3b82f6; }
+  .s2 .flow-name { color: #8b5cf6; }
+  .s3 .flow-name { color: #06b6d4; }
+  .s4 .flow-name { color: #10b981; }
+  .s5 .flow-name { color: #f59e0b; }
+  .s6 .flow-name { color: #0ea5e9; }
+  .s7 .flow-name { color: #6366f1; }
+  .s8 .flow-name { color: #ec4899; }
+
+  /* ── DETAIL PANEL ── */
+  .detail-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 48px;
+    display: none;
+    animation: fadeIn .25s ease;
+  }
+  .detail-panel.show { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .detail-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .detail-icon { font-size: 40px; }
+  .detail-info { flex: 1; }
+  .detail-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .detail-desc { font-size: 14px; color: var(--text-mid); max-width: 600px; }
+
+  .companies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .company-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: border-color .2s;
+  }
+  .company-card:hover { border-color: rgba(0,212,255,.4); }
+  .company-top {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+  }
+  .company-flag {
+    font-size: 18px;
+  }
+  .company-name {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .company-ticker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(0,212,255,.1);
+    border: 1px solid rgba(0,212,255,.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .company-role {
+    font-size: 12px;
+    color: var(--text-mid);
+  }
+  .company-highlight {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .tag-blue { background: rgba(59,130,246,.15); color: #60a5fa; }
+  .tag-purple { background: rgba(139,92,246,.15); color: #a78bfa; }
+  .tag-cyan { background: rgba(6,182,212,.15); color: #22d3ee; }
+  .tag-green { background: rgba(16,185,129,.15); color: #34d399; }
+  .tag-yellow { background: rgba(245,158,11,.15); color: #fbbf24; }
+  .tag-sky { background: rgba(14,165,233,.15); color: #38bdf8; }
+  .tag-indigo { background: rgba(99,102,241,.15); color: #818cf8; }
+  .tag-pink { background: rgba(236,72,153,.15); color: #f472b6; }
+  .tag-red { background: rgba(239,68,68,.15); color: #f87171; }
+
+  /* ── KEY CONCEPTS ── */
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .concept-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color .2s;
+  }
+  .concept-card:hover { border-color: rgba(0,212,255,.3); }
+  .concept-icon { font-size: 28px; margin-bottom: 10px; }
+  .concept-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .concept-body { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+  .concept-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px;
+    letter-spacing: .04em;
+  }
+
+  /* ── CAPEX TABLE ── */
+  .capex-section { margin-bottom: 48px; }
+  .capex-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .capex-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  .capex-row:last-child { border-bottom: none; }
+  .capex-row:hover { background: var(--surface2); }
+  .capex-logo { font-size: 22px; width: 32px; text-align: center; }
+  .capex-name { min-width: 90px; font-weight: 600; font-size: 14px; }
+  .capex-bar-bg {
+    flex: 1; height: 8px; background: rgba(255,255,255,.06);
+    border-radius: 4px; overflow: hidden;
+  }
+  .capex-bar-fill {
+    height: 100%; border-radius: 4px;
+    transition: width 1.2s cubic-bezier(.25,.8,.25,1);
+    width: 0;
+  }
+  .capex-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    min-width: 64px;
+    text-align: right;
+  }
+  .capex-lbl {
+    font-size: 11px;
+    color: var(--text-dim);
+    min-width: 80px;
+  }
+
+  /* ── TREND CARDS ── */
+  .trends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .trend-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .2s, transform .2s;
+  }
+  .trend-card:hover { border-color: rgba(0,212,255,.3); transform: translateY(-2px); }
+  .trend-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .trend-hot::before { background: linear-gradient(90deg, #ef4444, #f59e0b); }
+  .trend-rising::before { background: linear-gradient(90deg, #10b981, #06b6d4); }
+  .trend-watch::before { background: linear-gradient(90deg, #8b5cf6, #6366f1); }
+  .trend-heat {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .1em;
+    margin-bottom: 12px;
+  }
+  .hot { color: #f87171; }
+  .rising { color: #34d399; }
+  .watch { color: #a78bfa; }
+  .trend-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .trend-body { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .footer span { color: var(--accent); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">產業分析師報告 · 2026年版</div>
+  <h1>AI 產業<span>供應鏈</span>全圖</h1>
+  <p class="hero-sub">從晶片設計到你手上的AI應用，一張圖看懂背後完整的產業生態系</p>
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-val">$4,539億</div>
+      <div class="stat-lbl">北美CSP 2026資本支出</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-val">7.5萬片/月</div>
+      <div class="stat-lbl">台積電CoWoS月產能</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-val">600kW</div>
+      <div class="stat-lbl">NVIDIA Rubin機架功耗</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-val">+61%</div>
+      <div class="stat-lbl">CSP資本支出年增率</div>
+    </div>
+  </div>
+</div>
+
+<!-- SUPPLY CHAIN FLOW -->
+<div class="section">
+  <div class="section-title">核心架構</div>
+  <div class="section-h2">供應鏈八大環節</div>
+  <p class="section-desc">點擊各環節查看詳細說明與主要廠商</p>
+
+  <div class="flow-wrap">
+    <div class="flow-stage s1" onclick="showDetail(0)">
+      <div class="flow-icon">🧠</div>
+      <div class="flow-name">晶片設計</div>
+      <div class="flow-en">Chip Design</div>
+    </div>
+    <div class="flow-stage s2" onclick="showDetail(1)">
+      <div class="flow-icon">🔬</div>
+      <div class="flow-name">晶圓製造</div>
+      <div class="flow-en">Wafer Fab</div>
+    </div>
+    <div class="flow-stage s3" onclick="showDetail(2)">
+      <div class="flow-icon">📦</div>
+      <div class="flow-name">先進封裝</div>
+      <div class="flow-en">Advanced Pkg</div>
+    </div>
+    <div class="flow-stage s4" onclick="showDetail(3)">
+      <div class="flow-icon">🖥️</div>
+      <div class="flow-name">伺服器組裝</div>
+      <div class="flow-en">Server ODM</div>
+    </div>
+    <div class="flow-stage s5" onclick="showDetail(4)">
+      <div class="flow-icon">⚡</div>
+      <div class="flow-name">電源供應</div>
+      <div class="flow-en">Power System</div>
+    </div>
+    <div class="flow-stage s6" onclick="showDetail(5)">
+      <div class="flow-icon">🌊</div>
+      <div class="flow-name">散熱冷卻</div>
+      <div class="flow-en">Thermal/Cooling</div>
+    </div>
+    <div class="flow-stage s7" onclick="showDetail(6)">
+      <div class="flow-icon">☁️</div>
+      <div class="flow-name">雲端服務</div>
+      <div class="flow-en">Cloud / CSP</div>
+    </div>
+    <div class="flow-stage s8" onclick="showDetail(7)">
+      <div class="flow-icon">🤖</div>
+      <div class="flow-name">AI應用</div>
+      <div class="flow-en">AI Application</div>
+    </div>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+      <div class="detail-icon" id="dIcon"></div>
+      <div class="detail-info">
+        <div class="detail-title" id="dTitle"></div>
+        <div class="detail-desc" id="dDesc"></div>
+      </div>
+    </div>
+    <div class="companies-grid" id="dCompanies"></div>
+  </div>
+</div>
+
+<!-- KEY CONCEPTS -->
+<div class="section">
+  <div class="section-title">新手必讀</div>
+  <div class="section-h2">6個關鍵技術名詞</div>
+  <p class="section-desc">聽說這些詞但搞不清楚是什麼？看這裡就夠了</p>
+
+  <div class="concepts-grid">
+    <div class="concept-card">
+      <div class="concept-badge tag-purple">封裝技術</div>
+      <div class="concept-title">🔗 CoWoS</div>
+      <div class="concept-body">把多顆晶片「黏」在一起的超級技術。就像把很多小電腦拼成一台超級電腦，讓它們高速溝通。NVIDIA的H100、B200都靠這個。全球只有台積電能大規模做。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-badge tag-cyan">記憶體</div>
+      <div class="concept-title">💧 HBM（高頻寬記憶體）</div>
+      <div class="concept-body">AI晶片運算需要「超快速暫存空間」。HBM就像從普通水管換成消防水管，傳輸速度快數十倍。由SK海力士、三星、美光供應，是AI算力的關鍵瓶頸。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-badge tag-sky">散熱</div>
+      <div class="concept-title">🌊 液冷散熱</div>
+      <div class="concept-body">AI伺服器超熱，風扇已不夠用。液冷就是用水（或冷媒）循環帶走熱量，像汽車水箱一樣。2026年從「選配」變「標配」，台廠散熱廠商迎來大商機。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-badge tag-yellow">電力</div>
+      <div class="concept-title">⚡ HVDC（高壓直流）</div>
+      <div class="concept-body">傳統機房用低壓供電，但AI功耗太高，損耗大。HVDC把電壓拉高、電流縮小，減少損耗提高效率。就像高鐵用高壓電比公路省能一樣。2026年開始大規模導入。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-badge tag-indigo">網路</div>
+      <div class="concept-title">💡 CPO（矽光子）</div>
+      <div class="concept-body">AI伺服器間資料傳輸改用「光」而非「電」。就像從銅線電話升級到光纖，速度更快、功耗更低。是下一波AI基礎建設的新戰場。</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-badge tag-green">晶片</div>
+      <div class="concept-title">🎯 ASIC（專用晶片）</div>
+      <div class="concept-body">Google、Amazon、Meta不想完全依賴NVIDIA，自己設計專屬AI晶片。比通用GPU更省電、更便宜，但只能做特定任務。台灣的IC設計服務公司（如創意電子）因此受惠。</div>
+    </div>
+  </div>
+</div>
+
+<!-- CAPEX SECTION -->
+<div class="section capex-section">
+  <div class="section-title">資金流向</div>
+  <div class="section-h2">科技巨頭 2026 資本支出</div>
+  <p class="section-desc">這些錢很大一部分流入AI伺服器採購，養活了整條台灣供應鏈</p>
+
+  <div class="capex-bar-wrap" id="capexBars">
+    <div class="capex-row">
+      <div class="capex-logo">🔡</div>
+      <div class="capex-name">Alphabet</div>
+      <div class="capex-bar-bg"><div class="capex-bar-fill" style="background: linear-gradient(90deg,#4285f4,#34a853);" data-pct="100"></div></div>
+      <div class="capex-val">$750億</div>
+      <div class="capex-lbl">美元/年</div>
+    </div>
+    <div class="capex-row">
+      <div class="capex-logo">📘</div>
+      <div class="capex-name">Meta</div>
+      <div class="capex-bar-bg"><div class="capex-bar-fill" style="background: linear-gradient(90deg,#1877f2,#0099ff);" data-pct="87"></div></div>
+      <div class="capex-val">$650億</div>
+      <div class="capex-lbl">美元/年</div>
+    </div>
+    <div class="capex-row">
+      <div class="capex-logo">🪟</div>
+      <div class="capex-name">Microsoft</div>
+      <div class="capex-bar-bg"><div class="capex-bar-fill" style="background: linear-gradient(90deg,#00bcf2,#0078d4);" data-pct="80"></div></div>
+      <div class="capex-val">持續擴張</div>
+      <div class="capex-lbl">Azure擴建</div>
+    </div>
+    <div class="capex-row">
+      <div class="capex-logo">🛒</div>
+      <div class="capex-name">Amazon AWS</div>
+      <div class="capex-bar-bg"><div class="capex-bar-fill" style="background: linear-gradient(90deg,#ff9900,#ff6600);" data-pct="75"></div></div>
+      <div class="capex-val">高速成長</div>
+      <div class="capex-lbl">資料中心</div>
+    </div>
+    <div class="capex-row">
+      <div class="capex-logo">⬛</div>
+      <div class="capex-name">Oracle</div>
+      <div class="capex-bar-bg"><div class="capex-bar-fill" style="background: linear-gradient(90deg,#f80000,#cc0000);" data-pct="45"></div></div>
+      <div class="capex-val">快速布局</div>
+      <div class="capex-lbl">雲端AI</div>
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--text-dim);margin-top:12px;">* 北美5大CSP 2026年合計資本支出預估達 <span style="color:var(--accent)">$4,539億美元</span>，年增18%</p>
+</div>
+
+<!-- TRENDING TOPICS -->
+<div class="section">
+  <div class="section-title">2026 熱門趨勢</div>
+  <div class="section-h2">現在市場最關注的4個題材</div>
+  <p class="section-desc">選股、理解新聞時最常看到的主題</p>
+
+  <div class="trends-grid">
+    <div class="trend-card trend-hot">
+      <div class="trend-heat hot">🔥 超熱門</div>
+      <div class="trend-title">液冷散熱大爆發</div>
+      <div class="trend-body">NVIDIA Rubin機架功耗逼近600kW，風冷散熱已到物理極限。液冷從「加分選配」正式變成「強制標配」。散熱廠商訂單能見度延伸至2027年，台廠如雙鴻、奇鋐迎來歷史性機遇。</div>
+    </div>
+    <div class="trend-card trend-hot">
+      <div class="trend-heat hot">🔥 超熱門</div>
+      <div class="trend-title">CoWoS 產能瘋狂擴張</div>
+      <div class="trend-body">台積電CoWoS月產能2026年底預計突破7.5萬片，年增超100%。這是整條AI伺服器供應鏈的起點，產能決定出貨速度。日月光、欣興、南電一起受惠。</div>
+    </div>
+    <div class="trend-card trend-rising">
+      <div class="trend-heat rising">📈 快速崛起</div>
+      <div class="trend-title">CPU需求回歸主角</div>
+      <div class="trend-body">AI代理（Agentic AI）時代，CPU處理延遲佔總延遲90%以上。資料中心CPU：GPU比例將從1:4提升到1:1至1:2。Arm、NVIDIA都宣布推出獨立CPU產品，AMD EPYC持續搶市。</div>
+    </div>
+    <div class="trend-card trend-rising">
+      <div class="trend-heat rising">📈 快速崛起</div>
+      <div class="trend-title">HVDC高壓電力系統</div>
+      <div class="trend-body">機房從54V升到800V甚至更高電壓，減少傳輸損耗。2026年下半年開始出貨，主要客戶是Meta與Google。台達電、順達、新盛力積極搶單佈局。</div>
+    </div>
+    <div class="trend-card trend-watch">
+      <div class="trend-heat watch">👀 值得關注</div>
+      <div class="trend-title">矽光子CPO光互連</div>
+      <div class="trend-body">AI伺服器叢集間資料傳輸從銅線改用光，速度更快、省電更多。NVIDIA、博通正積極卡位，台廠PCB與連接器廠商也在布局這塊新市場。</div>
+    </div>
+    <div class="trend-card trend-watch">
+      <div class="trend-heat watch">👀 值得關注</div>
+      <div class="trend-title">AI PC換機潮</div>
+      <div class="trend-body">Windows 10已於2025年10月終止支援，帶動企業批量換機。AMD Ryzen AI 300、Intel Core Ultra均採台積電3-4nm製程製造。2026年AI PC滲透率有望從利基走向主流。</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>資料來源：TrendForce、Counterpoint Research、玉山投顧、數位時代 · 整理時間：<span>2026年6月</span></p>
+  <p style="margin-top:6px;">本頁僅供教育參考，不構成投資建議</p>
+</div>
+
+<script>
+const stages = [
+  {
+    icon: '🧠',
+    title: '晶片設計（Chip Design）',
+    desc: '這裡負責設計AI運算的大腦。NVIDIA設計GPU、Google設計TPU、各雲端廠商設計自家ASIC。設計完後交給台積電製造，自己不擁有工廠（稱為「Fabless」模式）。',
+    companies: [
+      { flag: '🇺🇸', name: 'NVIDIA', ticker: 'NVDA', role: 'AI GPU龍頭，H100/B200/Rubin', tag: 'tag-blue', tagText: '絕對龍頭' },
+      { flag: '🇺🇸', name: 'AMD', ticker: 'AMD', role: 'AI GPU挑戰者，MI300系列', tag: 'tag-blue', tagText: '強力競爭' },
+      { flag: '🇺🇸', name: 'Google', ticker: 'GOOGL', role: 'TPU自研晶片，Trillium', tag: 'tag-purple', tagText: '自研ASIC' },
+      { flag: '🇺🇸', name: 'Amazon', ticker: 'AMZN', role: 'Trainium / Inferentia', tag: 'tag-purple', tagText: '自研ASIC' },
+      { flag: '🇺🇸', name: 'Broadcom', ticker: 'AVGO', role: 'AI ASIC設計服務龍頭', tag: 'tag-cyan', tagText: '設計服務' },
+      { flag: '🇹🇼', name: '創意電子', ticker: '3443', role: 'CSP ASIC後端設計服務', tag: 'tag-cyan', tagText: '設計服務' },
+      { flag: '🇺🇸', name: 'Marvell', ticker: 'MRVL', role: 'AI網路晶片與ASIC', tag: 'tag-blue', tagText: '網路晶片' },
+    ]
+  },
+  {
+    icon: '🔬',
+    title: '晶圓製造（Wafer Fabrication）',
+    desc: '把設計圖變成真實晶片的超精密工廠。台積電在這裡幾乎是全球唯一能量產最先進製程的廠商。AI晶片越快、越強，就越依賴台積電的先進製程。',
+    companies: [
+      { flag: '🇹🇼', name: '台積電', ticker: '2330', role: '全球先進製程龍頭，N3/N2/CoWoS', tag: 'tag-blue', tagText: '不可替代' },
+      { flag: '🇰🇷', name: 'Samsung', ticker: '005930', role: '晶圓代工競爭者（良率仍落後）', tag: 'tag-purple', tagText: '追趕中' },
+      { flag: '🇺🇸', name: 'Intel Foundry', ticker: 'INTC', role: 'Intel 18A製程，良率待突破', tag: 'tag-yellow', tagText: '觀察中' },
+    ]
+  },
+  {
+    icon: '📦',
+    title: '先進封裝（Advanced Packaging）',
+    desc: '把晶圓切割後的晶片，用超高密度方式整合在一起。CoWoS技術讓GPU、HBM記憶體可以超近距離超高速溝通，是AI伺服器性能的關鍵。',
+    companies: [
+      { flag: '🇹🇼', name: '台積電', ticker: '2330', role: 'CoWoS封裝全球唯一大規模供應商', tag: 'tag-blue', tagText: '絕對龍頭' },
+      { flag: '🇹🇼', name: '日月光投控', ticker: '3711', role: 'CoWoS後段封裝測試，oS訂單', tag: 'tag-purple', tagText: '深度受惠' },
+      { flag: '🇹🇼', name: '欣興電子', ticker: '3037', role: 'ABF載板，訂單能見度至2027', tag: 'tag-cyan', tagText: '載板龍頭' },
+      { flag: '🇹🇼', name: '南亞電路板', ticker: '8046', role: 'ABF載板專攻，高階產品', tag: 'tag-cyan', tagText: '載板受惠' },
+      { flag: '🇰🇷', name: 'SK海力士', ticker: '000660', role: 'HBM記憶體第一供應商', tag: 'tag-green', tagText: 'HBM龍頭' },
+      { flag: '🇰🇷', name: 'Samsung', ticker: '005930', role: 'HBM記憶體供應商', tag: 'tag-green', tagText: 'HBM二號' },
+      { flag: '🇺🇸', name: 'Micron', ticker: 'MU', role: 'HBM記憶體後起之秀', tag: 'tag-green', tagText: 'HBM三號' },
+    ]
+  },
+  {
+    icon: '🖥️',
+    title: '伺服器組裝（Server ODM）',
+    desc: '把GPU、CPU、記憶體、電源、散熱全部組裝成完整AI伺服器，交給微軟、Google、Meta使用。台灣的廣達、緯穎、英業達是全球最大的AI伺服器代工廠。',
+    companies: [
+      { flag: '🇹🇼', name: '廣達電腦', ticker: '2382', role: '全球最大AI伺服器代工廠，接微軟/Google訂單', tag: 'tag-blue', tagText: '全球第一' },
+      { flag: '🇹🇼', name: '緯穎科技', ticker: '6669', role: 'NVIDIA DGX超級電腦核心代工，AI占比70%+', tag: 'tag-blue', tagText: '純AI概念' },
+      { flag: '🇹🇼', name: '英業達', ticker: '2356', role: '全球前二大AI伺服器代工廠', tag: 'tag-purple', tagText: '重量級' },
+      { flag: '🇹🇼', name: '緯創資通', ticker: '3231', role: 'AI伺服器ODM廠', tag: 'tag-purple', tagText: '規模擴張' },
+      { flag: '🇺🇸', name: 'Super Micro', ticker: 'SMCI', role: '高密度AI伺服器，直接賣給客戶', tag: 'tag-cyan', tagText: '美系ODM' },
+    ]
+  },
+  {
+    icon: '⚡',
+    title: '電源供應系統（Power System）',
+    desc: 'AI伺服器吃電驚人，需要高效率電源。HVDC（高壓直流）是2026年新趨勢，把傳輸電壓拉高以減少損耗。還有BBU備援電源，讓機房斷電時不受影響。',
+    companies: [
+      { flag: '🇹🇼', name: '台達電子', ticker: '2308', role: 'Power Rack領導廠，HVDC方案開發', tag: 'tag-yellow', tagText: '電源龍頭' },
+      { flag: '🇹🇼', name: '順達科技', ticker: '3211', role: 'BBU切入AWS/Google供應鏈', tag: 'tag-yellow', tagText: 'BBU受惠' },
+      { flag: '🇹🇼', name: '新盛力科技', ticker: '4931', role: 'BBU已通過Meta認證，黑馬', tag: 'tag-yellow', tagText: 'BBU黑馬' },
+      { flag: '🇺🇸', name: 'Vertiv', ticker: 'VRT', role: '資料中心電源管理方案', tag: 'tag-yellow', tagText: '美系廠' },
+    ]
+  },
+  {
+    icon: '🌊',
+    title: '散熱冷卻（Thermal / Cooling）',
+    desc: 'AI晶片越強越熱，NVIDIA Rubin機架功耗逼近600kW。液冷散熱從2025年開始全面替代風冷，成為標配。台灣散熱廠訂單能見度延伸至2027年以上。',
+    companies: [
+      { flag: '🇹🇼', name: '雙鴻科技', ticker: '3324', role: '液冷散熱方案，客戶含廣達/緯穎', tag: 'tag-sky', tagText: '液冷龍頭' },
+      { flag: '🇹🇼', name: '奇鋐科技', ticker: '3017', role: '高階散熱模組，AI伺服器受惠', tag: 'tag-sky', tagText: '散熱大廠' },
+      { flag: '🇹🇼', name: '建準電機', ticker: '2421', role: '工業用散熱風扇與風冷模組', tag: 'tag-sky', tagText: '風冷為主' },
+      { flag: '🇩🇪', name: 'Cooler Master', ticker: '-', role: '整合式液冷系統', tag: 'tag-sky', tagText: '散熱廠' },
+    ]
+  },
+  {
+    icon: '☁️',
+    title: '雲端服務（Cloud / CSP）',
+    desc: '把AI算力包裝成服務，讓企業和開發者可以按量使用。AWS、Azure、Google Cloud是三大巨頭，同時也在自研晶片減少對NVIDIA的依賴。這裡是AI算力需求的來源端。',
+    companies: [
+      { flag: '🇺🇸', name: 'AWS', ticker: 'AMZN', role: '全球最大雲端，自研Trainium晶片', tag: 'tag-indigo', tagText: 'CSP第一' },
+      { flag: '🇺🇸', name: 'Microsoft Azure', ticker: 'MSFT', role: 'OpenAI合作夥伴，AI服務最強', tag: 'tag-indigo', tagText: 'AI合作王' },
+      { flag: '🇺🇸', name: 'Google Cloud', ticker: 'GOOGL', role: '自研TPU，Gemini模型整合', tag: 'tag-indigo', tagText: '自研最深' },
+      { flag: '🇺🇸', name: 'Oracle Cloud', ticker: 'ORCL', role: '快速追趕，資本支出激增', tag: 'tag-purple', tagText: '快速成長' },
+    ]
+  },
+  {
+    icon: '🤖',
+    title: 'AI應用層（AI Application）',
+    desc: '最終讓使用者感受到AI的地方。包含語言模型、圖像生成、AI助理等各種服務。這層不直接製造硬體，但是整條供應鏈需求的最終來源。',
+    companies: [
+      { flag: '🇺🇸', name: 'OpenAI', ticker: '-', role: 'ChatGPT / GPT-5，估值近$7,500億', tag: 'tag-pink', tagText: '市場龍頭' },
+      { flag: '🇺🇸', name: 'Anthropic', ticker: '-', role: 'Claude系列，估值突破$3,000億', tag: 'tag-pink', tagText: '安全AI' },
+      { flag: '🇺🇸', name: 'Google DeepMind', ticker: 'GOOGL', role: 'Gemini系列多模態模型', tag: 'tag-pink', tagText: '多模態' },
+      { flag: '🇺🇸', name: 'Meta AI', ticker: 'META', role: 'Llama開源模型，大量自用', tag: 'tag-pink', tagText: '開源推手' },
+      { flag: '🇺🇸', name: 'xAI (Grok)', ticker: '-', role: 'Grok模型，SpaceX估值$8,000億', tag: 'tag-pink', tagText: '馬斯克系' },
+    ]
+  }
+];
+
+let currentStage = -1;
+
+function showDetail(idx) {
+  const panel = document.getElementById('detailPanel');
+  const stages_el = document.querySelectorAll('.flow-stage');
+
+  // toggle
+  if (currentStage === idx) {
+    panel.classList.remove('show');
+    stages_el[idx].classList.remove('active');
+    currentStage = -1;
+    return;
+  }
+
+  stages_el.forEach(s => s.classList.remove('active'));
+  stages_el[idx].classList.add('active');
+  currentStage = idx;
+
+  const s = stages[idx];
+  document.getElementById('dIcon').textContent = s.icon;
+  document.getElementById('dTitle').textContent = s.title;
+  document.getElementById('dDesc').textContent = s.desc;
+
+  const grid = document.getElementById('dCompanies');
+  grid.innerHTML = s.companies.map(c => `
+    <div class="company-card">
+      <div class="company-top">
+        <span class="company-flag">${c.flag}</span>
+        <span class="company-name">${c.name}</span>
+        ${c.ticker !== '-' ? `<span class="company-ticker">${c.ticker}</span>` : ''}
+      </div>
+      <div class="company-role">${c.role}</div>
+      <span class="company-highlight ${c.tag}">${c.tagText}</span>
+    </div>
+  `).join('');
+
+  panel.classList.add('show');
+
+  // scroll into view
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+// Animate capex bars on load
+function animateBars() {
+  const bars = document.querySelectorAll('.capex-bar-fill');
+  bars.forEach(bar => {
+    const pct = bar.dataset.pct;
+    setTimeout(() => { bar.style.width = pct + '%'; }, 300);
+  });
+}
+
+// Intersection observer for bars
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { animateBars(); obs.unobserve(e.target); } });
+}, { threshold: 0.3 });
+
+const capexEl = document.getElementById('capexBars');
+if (capexEl) obs.observe(capexEl);
+</script>
+</body>
+</html>
